@@ -1,0 +1,37 @@
+name: Python Test
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Install dependencies
+        run: |
+          pip install requests
+          echo "✅ Dependencies installed"
+      
+      - name: Check syntax
+        run: |
+          python -m py_compile waf_detector.py
+          python -m py_compile bypass_payloads.py
+          python -m py_compile encoder.py
+          echo "✅ Syntax check passed"
+      
+      - name: Test imports
+        run: |
+          python -c "import waf_detector; print('✅ WAF Detector OK')"
+          python -c "import bypass_payloads; print('✅ Bypass Payloads OK')"
+          python -c "import encoder; print('✅ Encoder OK')"
+      
+      - name: All tests passed
+        run: echo "✅✅✅ WAF BYPASS TOOLKIT READY! ✅✅✅"
